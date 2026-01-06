@@ -1,0 +1,14 @@
+{
+  "name": "charging-station-api",
+  "version": "1.0.0",
+  "description": "Backend for ESP32 Cashfree integration",
+  "type": "module",
+  "engines": {
+    "node": ">=18.x"
+  },
+  "scripts": {
+    "start": "node api/create_order.js"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
