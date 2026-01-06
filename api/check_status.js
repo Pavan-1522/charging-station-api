@@ -1,10 +1,7 @@
 export default async function handler(req, res) {
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
 
   const { order_id } = req.query;
-
   const url = `https://sandbox.cashfree.com/pg/orders/${order_id}`;
   
   const options = {
@@ -20,14 +17,7 @@ export default async function handler(req, res) {
   try {
     const response = await fetch(url, options);
     const data = await response.json();
-    
-    // Return Status AND Details
-    res.status(200).json({ 
-        status: data.order_status, 
-        amount: data.order_amount,
-        currency: data.order_currency,
-        created_at: data.created_at
-    });
+    res.status(200).json(data); // Returns full order details
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

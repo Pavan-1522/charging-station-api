@@ -1,19 +1,11 @@
 export default async function handler(req, res) {
-  // CORS Check
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
 
   const { amount, phone } = req.body;
-
-  // 1. URL: Use Orders API
   const url = 'https://sandbox.cashfree.com/pg/orders'; 
-  
-  // 2. ID: Generate unique Order ID
-  const orderId = "order_" + Date.now(); 
+  const orderId = "ord_" + Date.now(); 
 
-  // 3. RETURN URL: Where user goes after paying
-  // Cashfree will replace {order_id} automatically
+  // IMPORTANT: The return URL sends the user back to your site with the order_id
   const returnUrl = "https://pavan-1522.github.io/elegets-charging-station/?order_id={order_id}";
 
   const options = {
@@ -30,31 +22,25 @@ export default async function handler(req, res) {
       order_amount: amount,
       order_currency: "INR",
       customer_details: {
-        customer_id: "cust_" + Date.now(),
+        customer_id: "user_" + Date.now(),
         customer_phone: phone || "9999999999",
-        customer_name: "EV User",
-        customer_email: "user@elegets.in"
+        customer_name: "Elegets User"
       },
-      order_meta: {
-        return_url: returnUrl
-      }
+      order_meta: { return_url: returnUrl }
     })
   };
 
   try {
     const response = await fetch(url, options);
     const data = await response.json();
+    
+    if (data.type === "error") return res.status(400).json({ error: data.message });
 
-    if (data.type === "error") {
-      return res.status(400).json({ error: data.message });
-    }
-
-    // 4. RESPONSE: Send the Session ID to frontend
+    // Send the payment_session_id needed for the SDK
     res.status(200).json({ 
         order_id: data.order_id, 
         payment_session_id: data.payment_session_id 
     });
-
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
