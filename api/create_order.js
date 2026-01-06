@@ -1,4 +1,7 @@
 export default async function handler(req, res) {
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
   // 1. Get data from ESP32
   const { amount, phone } = req.body;
 
