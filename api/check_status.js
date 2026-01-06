@@ -2,7 +2,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const { order_id } = req.query;
-  const url = `https://sandbox.cashfree.com/pg/orders/${order_id}`;
+  const url = `https://api.cashfree.com/pg/orders/${order_id}`;
   
   const options = {
     method: 'GET',

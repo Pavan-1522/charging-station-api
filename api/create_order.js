@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   // 1. Receive 'minutes' from frontend
   const { amount, phone, minutes } = req.body;
   
-  const url = 'https://sandbox.cashfree.com/pg/orders'; 
+  const url = 'https://api.cashfree.com/pg/orders'; 
   const orderId = "ord_" + Date.now(); 
 
   // 2. Embed 'minutes' in the Return URL so it survives the redirect
