@@ -24,7 +24,7 @@ export default async function handler(req, res) {
         customer_phone: phone || "9999999999"
       },
       order_meta: {
-        return_url: "https://google.com" // Just a dummy placeholder
+        return_url: "https://elegets.in" // Just a dummy placeholder
       }
     })
   };
