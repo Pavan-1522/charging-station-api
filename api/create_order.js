@@ -1,12 +1,14 @@
 export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const { amount, phone } = req.body;
+  // 1. Receive 'minutes' from frontend
+  const { amount, phone, minutes } = req.body;
+  
   const url = 'https://sandbox.cashfree.com/pg/orders'; 
   const orderId = "ord_" + Date.now(); 
 
-  // IMPORTANT: The return URL sends the user back to your site with the order_id
-  const returnUrl = "https://pavan-1522.github.io/elegets-charging-station/?order_id={order_id}";
+  // 2. Embed 'minutes' in the Return URL so it survives the redirect
+  const returnUrl = `https://pavan-1522.github.io/elegets-charging-station/?order_id={order_id}&mins=${minutes}`;
 
   const options = {
     method: 'POST',
@@ -24,7 +26,7 @@ export default async function handler(req, res) {
       customer_details: {
         customer_id: "user_" + Date.now(),
         customer_phone: phone || "9999999999",
-        customer_name: "Elegets User"
+        customer_name: "Tester"
       },
       order_meta: { return_url: returnUrl }
     })
@@ -36,7 +38,6 @@ export default async function handler(req, res) {
     
     if (data.type === "error") return res.status(400).json({ error: data.message });
 
-    // Send the payment_session_id needed for the SDK
     res.status(200).json({ 
         order_id: data.order_id, 
         payment_session_id: data.payment_session_id 
