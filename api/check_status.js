@@ -1,8 +1,10 @@
 // api/check_status.js
 export default async function handler(req, res) {
-  const { order_id } = req.query; 
+  const { order_id } = req.query; // This will receive the link_id from ESP32
 
-  const url = `https://sandbox.cashfree.com/pg/orders/${order_id}`;
+  // CHANGE: Check the status of the LINK, not the order
+  const url = `https://sandbox.cashfree.com/pg/links/${order_id}`;
+  
   const options = {
     method: 'GET',
     headers: {
@@ -16,8 +18,9 @@ export default async function handler(req, res) {
   try {
     const response = await fetch(url, options);
     const data = await response.json();
-    // Return status: "PAID", "ACTIVE", or "EXPIRED"
-    res.status(200).json({ status: data.order_status });
+    
+    // Cashfree Links return "PAID", "ACTIVE" (Not Paid), or "EXPIRED"
+    res.status(200).json({ status: data.link_status });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
