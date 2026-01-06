@@ -31,7 +31,7 @@ export default async function handler(req, res) {
         customer_email: "user@elegets.in" // Email is required for Links, using a dummy is fine
       },
       link_meta: {
-        return_url: "https://elegets.in"
+        return_url: "https://pavan-1522.github.io/elegets-charging-station/"
       }
     })
   };
